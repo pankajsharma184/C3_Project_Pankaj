@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.*;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,7 +62,6 @@ class RestaurantServiceTest {
         restaurant = service.addRestaurant("Amelie's cafe","Chennai",openingTime,closingTime);
         restaurant.addToMenu("Sweet corn soup",119);
         restaurant.addToMenu("Vegetable lasagne", 269);
-
         assertThrows(restaurantNotFoundException.class,()->service.removeRestaurant("Pantry d'or"));
     }
 
@@ -78,4 +78,43 @@ class RestaurantServiceTest {
         assertEquals(initialNumberOfRestaurants + 1,service.getRestaurants().size());
     }
     //<<<<<<<<<<<<<<<<<<<<ADMIN: ADDING & REMOVING RESTAURANTS>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    @Test
+    public void selecting_food_items_from_menu_should_display_order_correct_value() {
+        ArrayList<String> orderItem = new ArrayList<>();
+        restaurant.addToMenu("Masala Dosa",50);
+        restaurant.addToMenu("Idly", 30);
+        restaurant.addToMenu("Vada", 40);
+        restaurant.addToMenu("Uttampam", 60);
+        restaurant.addToMenu("Kesari Bhat", 20);
+        restaurant.addToMenu("Filter Coffee", 10);
+
+        orderItem.add("Kesari Bhat");
+        orderItem.add("Masala Dosa");
+        orderItem.add("Vada");
+        assertEquals(110, restaurant.getOrderValue(orderItem));
+
+    }
+    @Test
+    public void removing_food_items_from_selected_list_should_reduce_the_order_value_by_removed_item_price() {
+        ArrayList<String> orderItem = new ArrayList<>();
+        restaurant.addToMenu("Masala Dosa",50);
+        restaurant.addToMenu("Idly", 30);
+        restaurant.addToMenu("Vada", 40);
+        restaurant.addToMenu("Uttampam", 60);
+        restaurant.addToMenu("Kesari Bhat", 20);
+        restaurant.addToMenu("Filter Coffee", 10);
+
+        orderItem.add("Kesari Bhat");
+        orderItem.add("Masala Dosa");
+        orderItem.add("Vada");
+
+        orderItem.remove("Kesari Bhat");
+        assertEquals(90, restaurant.getOrderValue(orderItem));
+
+    }
+
+
+
+
 }
